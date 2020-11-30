@@ -1,0 +1,30 @@
+.PasteList {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 10px;
+}
+
+.Paste {
+  border: 2px solid sienna;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 5px;
+  background-color: wheat;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.PasteTitle {
+  margin: 0;
+  padding: 0;
+}
+
+.PasteContent {
+  font-weight: 450;
+}
+
+footer {
+  opacity: 0.5;
+}
