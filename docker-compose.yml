@@ -1,0 +1,19 @@
+version: "2"
+services:
+  scraper-server:
+    build: ./pastor-server
+    ports: [8080:8080]
+    depends_on: [mongo, tor]
+
+  mongo:
+    image: mongo
+    environment: [
+        -MONGO_INITDB_DATABASE=TorScraper
+        -MONGO_INITDB_ROOT_USERNAME=MTN-G
+        -MONGO_INITDB_ROOT_PASSWORD=4tF96DRDNy8zUF7,
+      ]
+    ports: [27017:27017]
+
+  tor:
+    image: dperson/torproxy
+    ports: [8118:9050]

@@ -4,8 +4,9 @@ module.exports = async function fetchAllPostsFromTor(url, initDate = 0) {
     try {
         const posts = []
         const browser = await puppeteer.launch({
-            headless: false,
-            args: ['--proxy-server=socks5://127.0.0.1:9050']
+            // headless: false,
+            // args: ['--proxy-server=socks5://127.0.0.1:9050']
+            args: ['--proxy-server=socks5://tor:9050', '--no-sandbox']
         });
     
         // http://nzxj65x32vh2fkhk.onion/all ---- the real page :)
@@ -24,7 +25,8 @@ module.exports = async function fetchAllPostsFromTor(url, initDate = 0) {
     
                 const contentElem = await element.$(':scope > div[class="well well-sm well-white pre"]')
                 const contentText = await contentElem.getProperty('innerText')
-                const content = await contentText.jsonValue()
+                let content = await contentText.jsonValue()
+                content = content.toString().split(' ').filter(word => word !== '').join(' ')
                     
                 const footerElem = await element.$(':scope > div[class="pre-info pre-footer"]')
                 const footerText = await footerElem.getProperty('innerText')

@@ -18,7 +18,8 @@ function App() {
       setPostsLists(data)
     }
     fetchposts()
-  }, [lastCheck, search])
+  }, [lastCheck, search]);
+
 
   postsLists.map((post) => 
     post.Date = post.Date.toString().slice(0, 21).replace('T', ' , ')
