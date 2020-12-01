@@ -9,8 +9,8 @@ services:
     image: mongo
     environment: [
         -MONGO_INITDB_DATABASE=TorScraper
-        -MONGO_INITDB_ROOT_USERNAME=MTN-G
-        -MONGO_INITDB_ROOT_PASSWORD=4tF96DRDNy8zUF7,
+        -MONGO_INITDB_ROOT_USERNAME=root
+        -MONGO_INITDB_ROOT_PASSWORD=password,
       ]
     ports: [27017:27017]
 
