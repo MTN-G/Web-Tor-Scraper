@@ -22,6 +22,11 @@ connectDb()
 // // Check for new posts every 2 minutes
 let scraper;
 (scraper = async () => {
+    // const timeout = (ms) => {
+    //     return new Promise((resolve) => setTimeout(resolve, ms));
+    // };
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+    console.log('start scraping')
     await fetchAndSavePosts()
     setInterval(fetchAndSavePosts , 1000*2*60);
 })()
@@ -77,6 +82,39 @@ app.get('/charts/perDay', (req, res) => {
         sortedRes = response.sort((a, b) => new Date(a._id) - new Date(b._id))
         res.json(sortedRes)
     })
+})
+
+app.get('/charts/perAuthor', (req, res) => {
+    Post.aggregate([{
+        $group: {
+            _id: "$Author",
+            count: {$sum: 1}
+        }
+    }]).then(response => res.json(response))
+})
+
+app.get('/charts/samePosts', (req, res) => {
+    const postsComparer = []
+    Post.find({})
+        .then(posts => {
+            posts.forEach(post => {
+                const postString = post.Title + post.Content
+                const samePost = postsComparer.find(obj => obj.compare === postString)
+                if (samePost) {
+                    samePost.count++
+                } else {
+                    postsComparer.push({
+                        post,
+                        compare: postString,
+                        count: 1
+                    });
+                };
+            });
+            const onlyRepeatedPosts = postsComparer.filter(obj => obj.count > 1)
+            for (let obj of onlyRepeatedPosts) delete obj.compare
+            return onlyRepeatedPosts
+        }).then(response => res.json(response))
+    
 })
 
        
@@ -138,31 +176,5 @@ function filterByLabel (label, arr) {
             return arr.filter(string => string.Labels.includes(label.toLowerCase()))
     };
 };
+
 module.exports = app;
-       
-        
-        
-                    
-                    
-// app.post('/posts/init', async (req, res) => {
-    //     try {
-        //         const posts = await fetchAllPostsFromTor(realShit, new Date(Date.now - 2*60))
-        //         savePosts(posts)
-        //         res.send(posts)
-        //     } catch (error) {
-            //         res.status(402).send(error.message)
-            //     }
-            
-            // })
-            
-// Fetch all new posts since the last server's activity
-// Post.findOne()
-// .sort(
-    //     {
-        //         "Date": -1
-        //     }
-        //     ).then(async lastPost => {
-//         const lastPostDate = lastPost.Date
-//         const newPosts = await fetchAllPostsFromTor(StrongHoldPaste, lastPostDate)
-//         savePosts(newPosts)
-//     });

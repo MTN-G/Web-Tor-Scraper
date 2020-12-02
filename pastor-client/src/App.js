@@ -22,19 +22,19 @@ function App() {
   }, [lastCheck, search, label]);
 
 
-  postsLists.map((post) => 
+  postsLists.map((post) =>
     post.Date = post.Date.toString().slice(0, 21).replace('T', ' , ')
-  )
+  );
 
-  const LABELS = ['All', 'Pornography', 'Weapon', 'Social', 'Money']
+  const LABELS = ['All', 'Pornography', 'Weapon', 'Social', 'Money'];
 
   return (
     <div className="App">
       <button onClick={() => setLastCheck(new Date())}>Check for new pastes</button>
       <input onChange={
         (e) => {
-          setSearch(e.target.value)
-          setLastCheck(new Date())
+          setSearch(e.target.value);
+          setLastCheck(new Date());
         }} />
       <select onChange={(e) => setLabel(e.target.value)}>
         {LABELS.map(label => <option >{label}</option>)}
@@ -55,6 +55,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;
