@@ -1,13 +1,21 @@
 const puppeteer = require('puppeteer');
+require('dotenv').config()
 
 module.exports = async function fetchAllPostsFromTor(url, initDate = 0) {
     try {
         const posts = []
-        const browser = await puppeteer.launch({
-            // headless: false,
-            // args: ['--proxy-server=socks5://127.0.0.1:9050']
-            args: ['--proxy-server=socks5://tor:9050', '--no-sandbox']
-        });
+        const browser = await puppeteer.launch(
+            process.env.DOCKER ?
+                {
+                    headless: true,
+                    args: ["--proxy-server=socks5://tor:9050", "--no-sandbox"],
+                }
+                :
+                {
+                    headless: false,
+                    args: ['--proxy-server=socks5://127.0.0.1:9050']
+                }
+        );
     
         // http://nzxj65x32vh2fkhk.onion/all ---- the real page :)
     
@@ -47,7 +55,7 @@ module.exports = async function fetchAllPostsFromTor(url, initDate = 0) {
         };
     
         await browser.close();
-        console.log(posts, initDate)
+        console.log(posts.length ,"new posts since:", initDate)
         return posts
         
     } catch (error) {

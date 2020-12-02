@@ -16,6 +16,15 @@
   gap: 10px;
 }
 
+.firstLine {
+  display: flex;
+  justify-content: space-between;
+}
+
+.labels {
+  display: flex;
+}
+
 .PasteTitle {
   margin: 0;
   padding: 0;

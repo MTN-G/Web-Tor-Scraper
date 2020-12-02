@@ -1,2 +1,3 @@
 pastor-server/node_modules
+pastor-server/package-lock.json
 pastor-client/node_modules

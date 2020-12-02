@@ -1,19 +1,28 @@
-version: "2"
+version: "3.1"
+
 services:
-  scraper-server:
-    build: ./pastor-server
-    ports: [8080:8080]
-    depends_on: [mongo, tor]
-
-  mongo:
-    image: mongo
-    environment: [
-        -MONGO_INITDB_DATABASE=TorScraper
-        -MONGO_INITDB_ROOT_USERNAME=root
-        -MONGO_INITDB_ROOT_PASSWORD=password,
-      ]
-    ports: [27017:27017]
-
   tor:
     image: dperson/torproxy
-    ports: [8118:9050]
+    restart: unless-stopped
+    ports:
+      - "9050:9050"
+      - "8118:8118"
+    networks:
+      - fullstackScraper
+
+  scraper-server:
+    build: ./pastor-server
+    ports:
+      - "8080:8080"
+    volumes:
+      - type: bind
+        source: ./pastor-server
+        target: /pastor-server
+    networks:
+      - fullstackScraper
+    depends_on:
+      - tor
+
+networks:
+  fullstackScraper:
+    driver: bridge

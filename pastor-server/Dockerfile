@@ -1,11 +1,8 @@
 FROM node:12
 
-
 WORKDIR /usr/src/app
 
-COPY package*.json ./
-
-ENV PUPPETEER_EXECUTABLE_PATH="/usr/bin/google-chrome-stable"
+COPY package.json ./
 
 RUN apt-get update &&\
     apt-get install -yq gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 \
@@ -15,12 +12,14 @@ RUN apt-get update &&\
     ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget \
     xvfb x11vnc x11-xkb-utils xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic x11-apps
 
-# Run everything after as non-privileged user.?
 RUN npm i
 RUN npm un puppeteer
 RUN npm install puppeteer@2.0.0
 
 COPY . .
 
+ENV DOCKER=true
+
 EXPOSE 8080
+
 CMD [ "npm", "start" ]
